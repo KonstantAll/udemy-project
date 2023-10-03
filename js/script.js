@@ -51,8 +51,6 @@ window.addEventListener('DOMContentLoaded', () => {
             minutes = Math.floor(((t/1000/60)%60));
             seconds = Math.floor(((t/1000)%60));
         }
-
-
         return {
             'total': t,
             'days': days,
@@ -174,7 +172,6 @@ window.addEventListener('DOMContentLoaded', () => {
             this.parent.append(elem);
         }
     }
-
     const getResource = async (url) => {
         const res = await fetch(url);
 
@@ -217,7 +214,6 @@ window.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.menu .container').append(element)
         })
     }
-
 
     // Forms
 
@@ -295,7 +291,50 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
-    fetch('http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(res => console.log('res',res))
+    // Slider
+
+    const slides = document.querySelectorAll('.offer__slide'),
+        prev = document.querySelector('.offer__slider-prev'),
+        next = document.querySelector('.offer__slider-next'),
+        total = document.querySelector('#total'),
+        current = document.querySelector('#current');
+
+    let slideIndex = 1;
+
+    showSlides(slides.length);
+    if(slides.length < 10) {
+        total.textContent = `0${slides.length}`
+    }else{
+        total.textContent = slides.length;
+    }
+
+
+    function showSlides(n){
+        if(n > slides.length){
+            slideIndex = 1;
+        }
+        if(n < 1){
+            slideIndex = slides.length ;
+        }
+
+        slides.forEach(item => item.style.display = 'none');
+        slides[slideIndex - 1].style.display = '';
+
+        if(slideIndex < 10) {
+            current.textContent = `0${slideIndex}`
+        }else{
+            current.textContent = slideIndex;
+        }
+
+    }
+
+    function plusSlides(n){
+        showSlides(slideIndex += n);
+    }
+    prev.addEventListener('click', () => {
+        plusSlides(-1);
+    })
+    next.addEventListener('click', () => {
+        plusSlides(1);
+    })
 })
