@@ -139,39 +139,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Using classes for cards
 
-    class  MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector) {
-            this.src= src;
-            this.alt= alt;
-            this.title= title;
-            this.descr= descr;
-            this.price= price;
-            this.parent = document.querySelector(parentSelector);
-            this.transfer = 27;
-            this.changeToUAH();
-        }
-
-        changeToUAH() {
-            this.price = this.price*this.transfer;
-        }
-
-        render() {
-            const elem = document.createElement('div');
-            elem.innerHTML = `
-                <div class="menu__item">
-                    <img src=${this.src} alt=${this.alt}>
-                    <h3 class="menu__item-subtitle">${this.title}</h3>
-                    <div class="menu__item-descr">${this.descr}</div>
-                    <div class="menu__item-divider"></div>
-                    <div class="menu__item-price">
-                        <div class="menu__item-cost">Цена:</div>
-                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
-                </div>
-            `;
-            this.parent.append(elem);
-        }
-    }
     const getResource = async (url) => {
         const res = await fetch(url);
 
@@ -257,7 +224,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const json = JSON.stringify(Object.fromEntries(formData.entries()))
             postData('http://localhost:3000/requests', json)
             .then(data => {
-                console.log(data);
+                console.log('hi',data);
                 showThanksModal(message.success);
                 statusMessage.remove();
             }).catch(() => {
@@ -339,12 +306,16 @@ window.addEventListener('DOMContentLoaded', () => {
         dots.push(dot);
     }
 
+    function deleteNOtDigits(str){
+        return +str.replace(/\D/g, '');
+    }
+
     next.addEventListener('click', () => {
 
-        if(offset === +width.slice(0,width.length - 2)*(slides.length - 1)){
+        if(offset === deleteNOtDigits(width) * (slides.length - 1)){
             offset = 0;
         } else {
-            offset += +width.slice(0,width.length - 2);
+            offset += deleteNOtDigits(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
         if(slideIndex === slides.length) slideIndex = 1;
@@ -363,9 +334,9 @@ window.addEventListener('DOMContentLoaded', () => {
     prev.addEventListener('click', () => {
 
         if(offset === 0){
-            offset = +width.slice(0,width.length - 2)*(slides.length - 1);
+            offset =deleteNOtDigits(width)*(slides.length - 1);
         } else{
-            offset -= +width.slice(0,width.length - 2);
+            offset -= deleteNOtDigits(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
         if(slideIndex === 1) slideIndex = slides.length;
@@ -384,7 +355,7 @@ window.addEventListener('DOMContentLoaded', () => {
         dot.addEventListener('click', (e) => {
             const slideTo = e.target.getAttribute('data-slide-to');
             slideIndex = slideTo;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = deleteNOtDigits(width) * (slideTo - 1);
             slidesField.style.transform = `translateX(-${offset}px)`;
 
             dots.forEach(dot => dot.style.opacity = '.5');
@@ -396,5 +367,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    // window.localStorage.setItem('dobriydenjeverybody',{1:'1'})
 
 })
