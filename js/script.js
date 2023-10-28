@@ -1,3 +1,5 @@
+var Promise = require('es6-promise-polyfill').Promise;
+
 import tabs from './modules/tabs';
 import timer from './modules/timer';
 import modal, {openModal} from './modules/modal';

@@ -56,7 +56,7 @@ function cards(){
 
     // axios.get('http://localhost:3000/menu')
     //     .then(data => createCard(data.data))
-
+    console.log()
     function createCard(data){
         data.forEach(({img, alt, title, descr, price}) =>{
             const element = document.createElement('div');
